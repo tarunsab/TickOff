@@ -33,11 +33,42 @@ export default class App extends React.Component {
 
     }
 
+    //Initialising array of current todos
+    this.todoList = [];
+
   }
 
-    // componentDidMount() {
-    // }
-    //
+    componentDidMount() {
+
+      this.allTodosRef.on('child_added', (dataSnapshot) => {
+
+        //Adding to todoList
+        this.todoList.push({
+          id: dataSnapshot.key,
+          text: dataSnapshot.val()
+        })
+
+        //Updating database with current todoList
+        this.setState({
+          todoSource: this.state.allTodosSrc.cloneWithRows(this.items)
+        })
+
+      }
+
+      this.allTodosRef.on('child_removed', (dataSnapshot) => {
+
+        //Removing from todoList
+        this.todoList = this.todoList.filter((x) => x.id !== dataSnapshot.key);
+
+        //Updating database with current todoList
+        this.setState({
+          todoSource: this.state.allTodosSrc.cloneWithRows(this.items)
+        })
+
+      }
+
+    }
+
 
     //Adds todo to the database and clears todo in state
     addTodo() {
