@@ -1,5 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as firebase from "firebase";
+import {
+  Text,
+  View,
+  Component,
+  AppRegistry,
+  StyleSheet,
+  TouchableHighlight,
+  TextInput,
+  ListView,
+} from 'react-native';
 
 export default class App extends React.Component {
 
@@ -40,21 +50,25 @@ export default class App extends React.Component {
 
     componentDidMount() {
 
+
+      //Upon an added item from database
       this.allTodosRef.on('child_added', (dataSnapshot) => {
 
         //Adding to todoList
         this.todoList.push({
           id: dataSnapshot.key,
           text: dataSnapshot.val()
-        })
+        });
 
         //Updating database with current todoList
         this.setState({
-          todoSource: this.state.allTodosSrc.cloneWithRows(this.items)
-        })
+          todoSource: this.state.allTodosSrc.cloneWithRows(this.todoList)
+        });
 
-      }
+      });
 
+
+      //Upon a deleted item from database
       this.allTodosRef.on('child_removed', (dataSnapshot) => {
 
         //Removing from todoList
@@ -62,10 +76,11 @@ export default class App extends React.Component {
 
         //Updating database with current todoList
         this.setState({
-          todoSource: this.state.allTodosSrc.cloneWithRows(this.items)
+          todoSource: this.state.allTodosSrc.cloneWithRows(this.todoList)
         })
 
-      }
+      });
+
 
     }
 
@@ -79,28 +94,30 @@ export default class App extends React.Component {
         //Pushing the new todo onto the database
         this.allTodosRef.push({
           todo: this.state.newTodo
-        })
+        });
 
         //Resetting the current states new todo
         this.setState({
-          newTodo = ''
-        })
+          newTodo: ''
+        });
 
       }
     }
 
-    //Removes todo from fatabase
+    //Removes todo from database
     deleteTodo(rowData) {
       this.allTodosRef.child(rowData.id).remove();
     }
 
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
+        <Text>Edut App.js to start working on your app!</Text>
       </View>
     );
   }
+
 }
 
 const styles = StyleSheet.create({
