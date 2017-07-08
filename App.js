@@ -38,11 +38,30 @@ export default class App extends React.Component {
     // componentDidMount() {
     // }
     //
-    // addTodo() {
-    // }
-    //
-    // deleteTodo() {
-    // }
+
+    //Adds todo to the database and clears todo in state
+    addTodo() {
+
+      //If the todo to be added isn't empty
+      if (this.state.newTodo !== '') {
+
+        //Pushing the new todo onto the database
+        this.allTodosRef.push({
+          todo: this.state.newTodo
+        })
+
+        //Resetting the current states new todo
+        this.setState({
+          newTodo = ''
+        })
+
+      }
+    }
+
+    //Removes todo from fatabase
+    deleteTodo(rowData) {
+      this.allTodosRef.child(rowData.id).remove();
+    }
 
   render() {
     return (
