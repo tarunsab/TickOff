@@ -105,16 +105,72 @@ export default class App extends React.Component {
     }
 
     //Removes todo from database
-    deleteTodo(rowData) {
-      this.allTodosRef.child(rowData.id).remove();
+    deleteTodo(todoData) {
+      this.allTodosRef.child(todoData.id).remove();
     }
 
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>Edut App.js to start working on your app!</Text>
+
+        //Header
+        <View style={styles.container}>
+          <Text style={styles.Header}>
+            TaskOff
+          <Text>
+        </View>
+
+
+        //Textinput and add button
+        <View style={styles.inputSection}>
+
+           //TextInput
+           <TextInput style={styles.input} onChangeText={(text) => this.setState({newTodo: text})} value={this.state.newTodo}/>
+
+           //Add button
+           <TouchableHighlight
+             style={styles.button}
+             onPress={() => this.addTodo()}
+             underlayColor='#dddddd'>
+             <Text style={styles.btnText}>+</Text>
+           </TouchableHighlight>
+
+        </View>
+
+
+        //todoList
+        <ListView
+          dataSource={this.state.allTodosSrc}
+          renderRow={this.renderRow.bind(this)} />
+
       </View>
+    );
+  }
+
+  //Rendering each of the todo items in the ListView
+  renderRow(todoData) {
+    return (
+
+      //Todoitem and separator
+      <TouchableHighlight
+        underlayColor='#dddddd'
+        onPress={() => this.removeTodo(todoData)}
+
+        <View>
+
+          //Todo item text
+          <View style={styles.row}>
+            <Text style={styles.todoText}>todoData.text.todo}</Text>
+          </View>
+
+          //separator
+          <View style={styles.separator} />
+
+        </View>
+
+      </TouchableHighlight>
+
     );
   }
 
