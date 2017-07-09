@@ -38,7 +38,7 @@ export default class App extends React.Component {
 
       //Listview of all saved todos
       allTodosSrc: new ListView.DataSource({
-        rowHasChanged: (r1, r2) => row1 !== row2
+        rowHasChanged: (row1, row2) => row1 !== row2
       })
 
     }
@@ -62,7 +62,7 @@ export default class App extends React.Component {
 
         //Updating database with current todoList
         this.setState({
-          todoSource: this.state.allTodosSrc.cloneWithRows(this.todoList)
+          allTodosSrc: this.state.allTodosSrc.cloneWithRows(this.todoList)
         });
 
       });
@@ -76,7 +76,7 @@ export default class App extends React.Component {
 
         //Updating database with current todoList
         this.setState({
-          todoSource: this.state.allTodosSrc.cloneWithRows(this.todoList)
+          allTodosSrc: this.state.allTodosSrc.cloneWithRows(this.todoList)
         })
 
       });
@@ -114,32 +114,27 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
 
-        //Header
-        <View style={styles.container}>
-          <Text style={styles.Header}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>
             TaskOff
-          <Text>
+          </Text>
         </View>
 
 
-        //Textinput and add button
         <View style={styles.inputSection}>
 
-           //TextInput
-           <TextInput style={styles.input} onChangeText={(text) => this.setState({newTodo: text})} value={this.state.newTodo}/>
+           <TextInput style={styles.inputField} onChangeText={(text) => this.setState({newTodo: text})} value={this.state.newTodo}/>
 
-           //Add button
            <TouchableHighlight
              style={styles.button}
              onPress={() => this.addTodo()}
              underlayColor='#dddddd'>
-             <Text style={styles.btnText}>+</Text>
+             <Text style={styles.addButtonText}>+</Text>
            </TouchableHighlight>
 
         </View>
 
 
-        //todoList
         <ListView
           dataSource={this.state.allTodosSrc}
           renderRow={this.renderRow.bind(this)} />
@@ -155,16 +150,14 @@ export default class App extends React.Component {
       //Todoitem and separator
       <TouchableHighlight
         underlayColor='#dddddd'
-        onPress={() => this.removeTodo(todoData)}
+        onPress={() => this.deleteTodo(todoData)}>
 
         <View>
 
-          //Todo item text
           <View style={styles.row}>
-            <Text style={styles.todoText}>todoData.text.todo}</Text>
+            <Text style={styles.todoText}>{todoData.text.todo}</Text>
           </View>
 
-          //separator
           <View style={styles.separator} />
 
         </View>
@@ -179,8 +172,63 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  header:{
+    backgroundColor: '#26c6da',
+    paddingTop: 25,
+    paddingBottom: 10,
+    flexDirection: 'row'
+  },
+  headerText:{
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    flex: 1,
+    fontSize: 20,
+  },
+  inputSection: {
+    marginTop: 10,
+    marginBottom: 10,
+    padding: 15,
+    flexDirection: 'row'
+  },
+  inputField: {
+    height: 36,
+    padding: 4,
+    marginRight: 5,
+    flex: 4,
+    fontSize: 18,
+    borderWidth: 1,
+    borderColor: '#48afdb',
+    borderRadius: 4,
+    color: '#48bbec'
+  },
+  button: {
+    height: 36,
+    flex: 0.5,
+    flexDirection: 'row',
+    backgroundColor: '#26c6da',
+    justifyContent: 'center',
+    // color: '#ffffff',
+    borderRadius: 20,
+  },
+  addButtonText: {
+    fontSize: 18,
+    color: '#fff',
+    marginTop: 6,
+  },
+  row: {
+    flexDirection: 'row',
+    padding: 12,
+    height: 44
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#cccccc',
+  },
+  todoText: {
+    flex: 1,
+  }
+
+
 });
